@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
@@ -20,8 +22,9 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnOn, btnOff;
     TextView lblRespon;
+
+    ToggleButton btnLamp, btnEngine, btnDoor, btnAlarm;
 
     private Socket sc;
     {
@@ -39,40 +42,119 @@ public class MainActivity extends AppCompatActivity {
 
         sc.connect();
 
-        btnOn       = (Button) findViewById(R.id.btnON);
-        btnOff      = (Button) findViewById(R.id.btnOFF);
         lblRespon   = (TextView) findViewById(R.id.lblRespon);
 
-        btnOn.setOnClickListener(new View.OnClickListener() {
+        btnLamp = (ToggleButton) findViewById(R.id.tglLamp);
+        btnLamp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
-            public void onClick(View view) {
-                JSONObject obj1 = new JSONObject();
-                try{
-                    obj1.put("msg", 1);
-                }catch (JSONException e){
-                    e.printStackTrace();
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                JSONObject objLamp = new JSONObject();
+                if(b){
+                    try{
+                        objLamp.put("msg", true);
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                    btnLamp.setTextOn("ON Lamp");
                 }
-                sc.emit("statuslampu", obj1);
-                Log.d("statuslampu", Objects.toString(obj1));
+                else{
+                    try{
+                        objLamp.put("msg", false);
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                    btnLamp.setTextOff("OFF Lamp");
+                }
+                sc.emit("statuslampu", objLamp);
+                Log.d("statuslampu", Objects.toString(objLamp));
                 lblRespon.setText("Lampu ON");
             }
         });
 
-        btnOff.setOnClickListener(new View.OnClickListener() {
+        btnEngine = (ToggleButton) findViewById(R.id.tglEngine);
+        btnEngine.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
-            public void onClick(View view) {
-                JSONObject obj2 = new JSONObject();
-                try{
-                    obj2.put("msg", 0);
-                }catch (JSONException e){
-                    e.printStackTrace();
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                JSONObject objEngine = new JSONObject();
+                if(b){
+                    try{
+                        objEngine.put("msg", true);
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                    btnEngine.setTextOn("ON Engine");
                 }
-                sc.emit("statuslampu", obj2);
-                Log.d("statuslampu", Objects.toString(obj2));
-                lblRespon.setText("Lampu OFF");
+                else{
+                    try{
+                        objEngine.put("msg", false);
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                    btnEngine.setTextOff("OFF Engine");
+                }
+                sc.emit("statusengine", objEngine);
+                Log.d("statusengine", Objects.toString(objEngine));
+                lblRespon.setText("Engine ON");
+            }
+        });
+
+        btnDoor = (ToggleButton) findViewById(R.id.tglDoor);
+        btnDoor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                JSONObject objLamp = new JSONObject();
+                if(b){
+                    try{
+                        objLamp.put("msg", true);
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                    btnDoor.setTextOn("ON Door");
+                }
+                else{
+                    try{
+                        objLamp.put("msg", false);
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                    btnDoor.setTextOff("OFF Door");
+                }
+                sc.emit("statusdoor", objLamp);
+                Log.d("statusdoor", Objects.toString(objLamp));
+                lblRespon.setText("Door ON");
+            }
+        });
+
+        btnAlarm = (ToggleButton) findViewById(R.id.tglAlarm);
+        btnAlarm.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                JSONObject objLamp = new JSONObject();
+                if(b){
+                    try{
+                        objLamp.put("msg", true);
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                    btnAlarm.setTextOn("ON Alarm");
+                }
+                else{
+                    try{
+                        objLamp.put("msg", false);
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                    btnAlarm.setTextOff("OFF Alarm");
+                }
+                sc.emit("statusalarm", objLamp);
+                Log.d("statusAlarm", Objects.toString(objLamp));
+                lblRespon.setText("Alarm ON");
             }
         });
     }
+
 }
